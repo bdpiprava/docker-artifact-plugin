@@ -17,6 +17,7 @@
 package cd.go.artifact.docker;
 
 import cd.go.artifact.docker.model.ArtifactStoreConfig;
+import cd.go.artifact.docker.model.AuthenticationType;
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
@@ -38,12 +39,23 @@ public class DockerClientFactory {
     }
 
     private static DefaultDockerClient createClient(ArtifactStoreConfig artifactStoreConfig) throws DockerCertificateException, DockerException, InterruptedException {
-        final RegistryAuth registryAuth = RegistryAuth.builder()
-                .username(artifactStoreConfig.getUsername())
+        final RegistryAuth.Builder builder = RegistryAuth.builder()
                 .serverAddress(artifactStoreConfig.getRegistryUrl())
-                .password(artifactStoreConfig.getPassword()).build();
+                .username(artifactStoreConfig.getUsername());
 
-        DefaultDockerClient docker = DefaultDockerClient.fromEnv().registryAuth(registryAuth).build();
+        if (artifactStoreConfig.getAuthenticationType() == null) {
+            throw new RuntimeException(format("Invalid authentication type, It should one of %s.", AuthenticationType.values()));
+        }
+
+        if (AuthenticationType.USERNAME_PASSWORD == artifactStoreConfig.getAuthenticationType()) {
+            builder.password(artifactStoreConfig.getPassword());
+        }
+
+        if (AuthenticationType.IDENTITY_TOKEN == artifactStoreConfig.getAuthenticationType()) {
+            builder.identityToken(artifactStoreConfig.identityToken());
+        }
+
+        DefaultDockerClient docker = DefaultDockerClient.fromEnv().registryAuth(builder.build()).build();
 
         LOG.info(format("Using docker registry server `{0}`.", artifactStoreConfig.getRegistryUrl()));
 

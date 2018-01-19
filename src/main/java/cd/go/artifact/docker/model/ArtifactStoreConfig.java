@@ -31,22 +31,42 @@ public class ArtifactStoreConfig implements Validatable {
 
     @Expose
     @SerializedName("Username")
-    @ProfileField(key = "Username", required = true, secure = false)
+    @ProfileField(key = "Username", required = false, secure = false)
     private String username;
 
     @Expose
     @SerializedName("Password")
-    @ProfileField(key = "Password", required = true, secure = true)
+    @ProfileField(key = "Password", required = false, secure = true)
     private String password;
 
+    @Expose
+    @SerializedName("AuthenticationType")
+    @ProfileField(key = "AuthenticationType", required = true, secure = false)
+    private String authenticationType;
+
+    @Expose
+    @SerializedName("IdentityToken")
+    @ProfileField(key = "IdentityToken", required = false, secure = true)
+    private String identityToken;
 
     public ArtifactStoreConfig() {
     }
 
-    public ArtifactStoreConfig(String registryUrl,String username, String password) {
+    public ArtifactStoreConfig(String registryUrl, String username, String password) {
         this.registryUrl = registryUrl;
         this.username = username;
         this.password = password;
+        this.authenticationType = AuthenticationType.USERNAME_PASSWORD.getValue();
+    }
+
+    public ArtifactStoreConfig(String registryUrl, String identityToken) {
+        this.registryUrl = registryUrl;
+        this.identityToken = identityToken;
+        this.authenticationType = AuthenticationType.IDENTITY_TOKEN.getValue();
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getRegistryUrl() {
@@ -61,6 +81,14 @@ public class ArtifactStoreConfig implements Validatable {
         return password;
     }
 
+    public AuthenticationType getAuthenticationType() {
+        return AuthenticationType.from(authenticationType);
+    }
+
+    public String identityToken() {
+        return identityToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,7 +98,9 @@ public class ArtifactStoreConfig implements Validatable {
 
         if (registryUrl != null ? !registryUrl.equals(that.registryUrl) : that.registryUrl != null) return false;
         if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        return password != null ? password.equals(that.password) : that.password == null;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (authenticationType != that.authenticationType) return false;
+        return identityToken != null ? identityToken.equals(that.identityToken) : that.identityToken == null;
     }
 
     @Override
@@ -78,6 +108,8 @@ public class ArtifactStoreConfig implements Validatable {
         int result = registryUrl != null ? registryUrl.hashCode() : 0;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (authenticationType != null ? authenticationType.hashCode() : 0);
+        result = 31 * result + (identityToken != null ? identityToken.hashCode() : 0);
         return result;
     }
 

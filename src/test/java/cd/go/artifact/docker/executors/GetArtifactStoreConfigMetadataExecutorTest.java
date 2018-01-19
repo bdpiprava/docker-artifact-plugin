@@ -39,14 +39,28 @@ public class GetArtifactStoreConfigMetadataExecutorTest {
                 "  {\n" +
                 "    \"key\": \"Username\",\n" +
                 "    \"metadata\": {\n" +
-                "      \"required\": true,\n" +
+                "      \"required\": false,\n" +
                 "      \"secure\": false\n" +
                 "    }\n" +
                 "  },\n" +
                 "  {\n" +
                 "    \"key\": \"Password\",\n" +
                 "    \"metadata\": {\n" +
+                "      \"required\": false,\n" +
+                "      \"secure\": true\n" +
+                "    }\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"key\": \"AuthenticationType\",\n" +
+                "    \"metadata\": {\n" +
                 "      \"required\": true,\n" +
+                "      \"secure\": true\n" +
+                "    }\n" +
+                "  },\n" +
+                "  {\n" +
+                "    \"key\": \"IdentityToken\",\n" +
+                "    \"metadata\": {\n" +
+                "      \"required\": false,\n" +
                 "      \"secure\": true\n" +
                 "    }\n" +
                 "  }\n" +

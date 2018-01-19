@@ -48,12 +48,8 @@ public class ValidateArtifactStoreConfigExecutorExecutorTest {
                 "    \"message\": \"RegistryURL must not be blank.\"\n" +
                 "  },\n" +
                 "  {\n" +
-                "    \"key\": \"Password\",\n" +
-                "    \"message\": \"Password must not be blank.\"\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"key\": \"Username\",\n" +
-                "    \"message\": \"Username must not be blank.\"\n" +
+                "    \"key\": \"AuthenticationType\",\n" +
+                "    \"message\": \"AuthenticationType must not be blank.\"\n" +
                 "  }\n" +
                 "]";
         JSONAssert.assertEquals(expectedJSON, response.responseBody(), JSONCompareMode.NON_EXTENSIBLE);

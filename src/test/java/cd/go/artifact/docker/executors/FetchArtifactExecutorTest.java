@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
+import static cd.go.artifact.docker.utils.Util.GSON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -63,7 +64,7 @@ public class FetchArtifactExecutorTest {
     @Test
     public void shouldFetchArtifact() {
         final ArtifactStoreConfig storeConfig = new ArtifactStoreConfig("localhost:5000", "admin", "admin123");
-        final Map<String, Object> metadata = Collections.singletonMap("artifactId", "{\"image\":\"localhost:5000/alpine:v1\", \"digest\":\"foo\"}");
+        final Map<String, Object> metadata = Collections.singletonMap("artifactId", GSON.fromJson("{\"image\":\"localhost:5000/alpine:v1\", \"digest\":\"foo\"}", Map.class));
         final FetchArtifactExecutor.FetchArtifactRequest fetchArtifactRequest = new FetchArtifactExecutor.FetchArtifactRequest(storeConfig, "artifactId", metadata);
 
         when(request.requestBody()).thenReturn(new Gson().toJson(fetchArtifactRequest));
@@ -78,7 +79,7 @@ public class FetchArtifactExecutorTest {
     @Test
     public void shouldErrorOutWhenDigestIsNotSame() {
         final ArtifactStoreConfig storeConfig = new ArtifactStoreConfig("localhost:5000", "admin", "admin123");
-        final Map<String, Object> metadata = Collections.singletonMap("artifactId", "{\"image\":\"localhost:5000/alpine:v1\", \"digest\":\"foo\"}");
+        final Map<String, Object> metadata = Collections.singletonMap("artifactId", GSON.fromJson("{\"image\":\"localhost:5000/alpine:v1\", \"digest\":\"foo\"}", Map.class));
         final FetchArtifactExecutor.FetchArtifactRequest fetchArtifactRequest = new FetchArtifactExecutor.FetchArtifactRequest(storeConfig, "artifactId", metadata);
 
         when(request.requestBody()).thenReturn(new Gson().toJson(fetchArtifactRequest));
@@ -93,7 +94,7 @@ public class FetchArtifactExecutorTest {
     @Test
     public void shouldErrorOutWhenFailedToPull() {
         final ArtifactStoreConfig storeConfig = new ArtifactStoreConfig("localhost:5000", "admin", "admin123");
-        final Map<String, Object> metadata = Collections.singletonMap("artifactId", "{\"image\":\"localhost:5000/alpine:v1\", \"digest\":\"foo\"}");
+        final Map<String, Object> metadata = Collections.singletonMap("artifactId", GSON.fromJson("{\"image\":\"localhost:5000/alpine:v1\", \"digest\":\"foo\"}", Map.class));
         final FetchArtifactExecutor.FetchArtifactRequest fetchArtifactRequest = new FetchArtifactExecutor.FetchArtifactRequest(storeConfig, "artifactId", metadata);
 
         when(request.requestBody()).thenReturn(new Gson().toJson(fetchArtifactRequest));
